@@ -1,5 +1,5 @@
 import { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Overlay, ModalDiv } from './modal.styled';
 import { createPortal } from 'react-dom';
 // import style from './modal.module.css';
@@ -22,7 +22,7 @@ class Modal extends Component {
   };
 
   handleBackdropClick = e => {
-    e.target === e.currentTarget && this.props.toggleModal();
+    e.target !== e.currentTarget &&  this.props.onClose();
   };
 
   render() {
@@ -39,10 +39,10 @@ class Modal extends Component {
   }
 }
 
-// Modal.propTypes = {
-// modalImage: PropTypes.string.isRequired,
-// imageAlt: PropTypes.string.isRequired,
-// onClose: PropTypes.func.isRequired,
-// };
+Modal.propTypes = {
+modalImage: PropTypes.string.isRequired,
+imageAlt: PropTypes.string.isRequired,
+onClose: PropTypes.func,
+};
 
 export default Modal;

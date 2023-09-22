@@ -5,7 +5,6 @@ import style from './imageGallery.module.css';
 const ImageGallery = ({ images }) => {
   return (
     <section>
-      <h2 className="visually-hidden">gallery section</h2>
       <ul className={style.ImageGallery}>
         <ImageGalleryItem images={images} />
       </ul>

@@ -25,8 +25,7 @@ export default class Searchbar extends Component {
 
   render() {
     return (
-      <header className={style.Searchbar}>
-        <h1 className="visually-hidden">images gallery</h1>
+      <header className={style.SearchBar}>
         <form className={style.SearchForm} onSubmit={this.handleSubmit}>
           <label htmlFor="searchInput"></label>
           <input
