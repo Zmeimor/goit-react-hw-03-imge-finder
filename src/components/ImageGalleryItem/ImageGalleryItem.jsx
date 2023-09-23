@@ -42,15 +42,16 @@ export class ImageGalleryItem extends Component {
               src={image.webformatURL}
               alt={image.tags}
             />
-            {isOpen && (
+
+          </li>
+        ))}
+    {isOpen && (
               <Modal
                 modalImage={this.state.modalImage}
                 imageAlt={this.state.imageAlt}
                 onClose={this.toggleModal}
               />
             )}
-          </li>
-        ))}
       </>
     );
   }
