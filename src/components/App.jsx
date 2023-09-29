@@ -1,10 +1,11 @@
-import { Component } from 'react';
+// import { Component } from 'react';
 import fetchPictures from './API/api';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import Searchbar from './Searchbar/Searchbar';
 import style from './Searchbar/searchbar.module.css';
+import { useState, useEffect } from 'react';
 
 const Status = {
   IDLE: 'idle',
@@ -13,77 +14,91 @@ const Status = {
   REJECTED: 'rejected',
 };
 
-export default class App extends Component {
-  state = {
-    imageName: '',
-    images: [],
-    page: 1,
-    showButton: false,
-    status: Status.IDLE,
-    error: null,
-  };
+function App () {
+  const [showButton, setShowButton] = useState(false);
+  const [imageName, setImageName] = useState('');
+  const [page, setPage] = useState(1);
+  const [images, setImages] = useState([]);
+  // eslint-disable-next-line
+  const [error, setError] = useState(false);
+  const [status, setStatus] = useState(Status.IDLE);
+ 
 
-  componentDidUpdate(_, prevState) {
-    const prevName = prevState.imageName;
-    const nextName = this.state.imageName;
 
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
 
-    if (prevName !== nextName || prevPage !== nextPage) {
-      this.setState({ status: Status.PENDING });
+// export default class App extends Component {
+//   state = {
+//     imageName: '',
+//     images: [],
+//     page: 1,
+//     showButton: false,
+//     status: Status.IDLE,
+//     error: null,
+//   };
 
-      fetchPictures(nextName, this.state.page)
+  
+  // componentDidUpdate(_, prevState) {
+    // const prevName = prevState.imageName;
+    // const nextName = this.state.imageName;
+
+    // const prevPage = prevState.page;
+//     // const nextPage = this.state.page;
+
+//     if (prevState.imageName !== nextNthis.state.imageNameame || prevPage !== nextPage) {
+//       this.setState({ status: Status.PENDING });
+// }
+useEffect(() => {
+  if (imageName === '') {
+    return;
+  }
+  try {
+  fetchPictures(imageName, page)
         // .then(images => console.log(images))
         .then(pictures => {
           if (pictures.hits.length < 1) {
-            this.setState({
-              showButton: false,
-              status: Status.IDLE,
-            });
+            
+              setShowButton(false);
+              setStatus(Status.IDLE);
             return alert('No images on your query');
           }
-          // console.log(images);
-          this.setState(prevState => ({
-            images: [...prevState.images, ...pictures.hits],
-            showButton:
-              this.state.page < Math.ceil(pictures.total / 12) ? true : false,
-          }));
+          setImages([ ...pictures.hits]);
+          setShowButton(page < Math.ceil(pictures.total / 12) ? true : false);
+    
         })
-        .catch(err => {
-          this.setState({ error: err.message });
-        })
-        .finally(() => {
-          this.setState({
-            status: Status.RESOLVED,
-          });
-        });
-    }
-  }
+      } catch (error) {
+          setError(true);
+          console.log(true);
+        }
+      finally {
+          setStatus(Status.RESOLVED);
+        };
+      }, [imageName, page]
+      )
 
-  handleFormSubmit = imageName => {
-    if (imageName === this.state.imageName) {
+      const handleFormSubmit = (e) => {
+    if (e === imageName & page === 1) {
       return;
     }
-
-    this.setState({
-      imageName,
-      page: 1,
-      images: [],
-      showButton: false,
-      isOpen: false,
-      status: Status.IDLE,
-    });
+    // console.log(e);
+      setImageName(e);
+  
+      setPage(1);
+      setImages([]);
+      setShowButton(false);
+      // setStatus(Status.IDLE);
+      // console.log({status,imageName});
+      // isOpen: false,
   };
 
-  loadMoreImages = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const loadMoreImages = () => {
+
+   setPage( page + 1);
   };
 
-  render() {
-    const { images, status, showButton } = this.state;
+  // render() {
+    // const { images, status, showButton } = this.state;
 
-    const { handleFormSubmit, loadMoreImages } = this;
+    // const { handleFormSubmit, loadMoreImages } = this;
 
     return (
       <>
@@ -101,4 +116,4 @@ export default class App extends Component {
       </>
     );
   }
-}
+  export default App;

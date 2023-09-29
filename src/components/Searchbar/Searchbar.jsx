@@ -1,32 +1,36 @@
-import { Component } from 'react';
+import { useState} from 'react';
 import { FcSearch } from 'react-icons/fc';
 import style from './searchbar.module.css';
 
-export default class Searchbar extends Component {
-  state = {
-    searchImage: '',
+
+
+// export default class Searchbar extends Component {
+  // state = {
+  //   searchImage: '',
+  // };
+function Searchbar ({onSubmit})  {
+  const [searchImage, setSearchImage] = useState('');
+  const handleImageChange = event => {
+    setSearchImage( event.currentTarget.value.toLowerCase())
+
   };
 
-  handleImageChange = event => {
-    this.setState({ searchImage: event.currentTarget.value.toLowerCase() });
-  };
-
-  handleSubmit = event => {
+ const handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.searchImage.trim() === '') {
+    if (searchImage.trim() === '')
+    {
       return alert('Please, enter image name.');
     }
 
-    this.props.onSubmit(this.state.searchImage);
+    onSubmit(searchImage);
 
-    this.setState({ searchImage: '' });
+    setSearchImage('');
   };
 
-  render() {
     return (
       <header className={style.SearchBar}>
-        <form className={style.SearchForm} onSubmit={this.handleSubmit}>
+        <form className={style.SearchForm} onSubmit={handleSubmit}>
           <label htmlFor="searchInput"></label>
           <input
             id="searchInput"
@@ -35,9 +39,9 @@ export default class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.searchImage}
+            value={searchImage}
             className={style.SearchForm__input}
-            onChange={this.handleImageChange}
+            onChange={handleImageChange}
           ></input>
           <button type="submit" className={style.SearchForm__button}>
             <FcSearch size={30} />
@@ -47,4 +51,4 @@ export default class Searchbar extends Component {
       </header>
     );
   }
-}
+export default Searchbar;
