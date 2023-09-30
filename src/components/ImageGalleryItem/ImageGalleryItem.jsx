@@ -1,31 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import style from './imageGalleryitem.module.css';
 import Modal from '../Modal/Modal';
-// import { Item, Img } from './img.styled';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-export class ImageGalleryItem extends Component {
-  // }) => {
-  state = {
-    isOpen: false,
-    modalImage: '',
-    imageAlt: [],
-  };
-  toggleModal = () => {
-    this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+export function ImageGalleryItem ({images}) {
+  
+  const [isOpen, setIsOpen]=useState(false);
+  const [modalImage, setModalImage]=useState(false);
+  const [imageAlt, setImageAlt]=useState(false);
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
   };
 
-  handleModal = (largeImageURL, tags) => {
-    this.setState({
-      modalImage: largeImageURL,
-      imageAlt: tags,
-    });
-    this.toggleModal();
+ const handleModal = (largeImageURL, tags) => {
+  setModalImage (largeImageURL);
+  setImageAlt(tags);
+  toggleModal();
   };
-
-  render() {
-    const { isOpen } = this.state;
-    const { images } = this.props;
 
     return (
       <>
@@ -34,7 +26,7 @@ export class ImageGalleryItem extends Component {
             key={image.id}
             className={style.ImageGalleryItem}
             onClick={() => {
-              this.handleModal(image.largeImageURL, image.tags);
+              handleModal(image.largeImageURL, image.tags);
             }}
           >
             <img
@@ -47,17 +39,11 @@ export class ImageGalleryItem extends Component {
         ))}
     {isOpen && (
               <Modal
-                modalImage={this.state.modalImage}
-                imageAlt={this.state.imageAlt}
-                onClose={this.toggleModal}
+                modalImage={modalImage}
+                imageAlt={imageAlt}
+                onClose={toggleModal}
               />
             )}
       </>
     );
   }
-}
-
-ImageGalleryItem.propTypes = {
-  images: PropTypes.array.isRequired,
-  toggleModal: PropTypes.func,
-};

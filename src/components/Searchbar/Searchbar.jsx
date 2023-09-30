@@ -3,11 +3,6 @@ import { FcSearch } from 'react-icons/fc';
 import style from './searchbar.module.css';
 
 
-
-// export default class Searchbar extends Component {
-  // state = {
-  //   searchImage: '',
-  // };
 function Searchbar ({onSubmit})  {
   const [searchImage, setSearchImage] = useState('');
   const handleImageChange = event => {
